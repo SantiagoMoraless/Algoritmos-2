@@ -1,0 +1,100 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+
+#define ARRAY_SIZE 4
+
+struct bound_data {
+    bool is_upperbound;
+    bool is_lowerbound;
+    bool exists;
+    unsigned int where;
+};
+
+struct bound_data check_bound(int value, int arr[], unsigned int length) {
+    struct bound_data res;
+
+    int i = length - 1;
+    res.is_upperbound = true;
+    res.is_lowerbound = true;
+    res.exists = false;
+    res.where = length + 1;
+
+    while (i >= 0)
+    {
+    
+     if (res.is_upperbound) {
+       res.is_upperbound = value >= arr[i];
+     } else {
+       res.is_upperbound = false;
+     }
+
+     if (res.is_lowerbound) {
+       res.is_lowerbound = value <= arr[i];
+     } else {
+       res.is_lowerbound = false;
+     }
+     
+     if (arr[i] == value) {
+       res.exists = true;
+       res.where = i;
+     }
+
+     i = i - 1;
+    }
+    
+    
+    return res;
+}
+
+
+void pedirArreglo(int arr[], int n_max) {
+  int i = 0;
+  int n;
+
+  while (i<n_max)
+  {
+    printf("Ingrese el elemento %d del arreglo:\n", i);
+    scanf("%d", &n);
+    arr[i] = n;
+    i = i + 1;
+  }
+  
+}
+
+int main(void) {
+  
+  int value;
+  int arr[ARRAY_SIZE];
+  pedirArreglo(arr, ARRAY_SIZE);
+  
+  printf("Ingrese un valor para comparar:\n");
+  scanf("%d", &value);
+
+  struct bound_data f = check_bound(value, arr, ARRAY_SIZE);
+
+  if (f.is_upperbound) {
+    if (f.exists){
+      printf("El valor ingresado es un maximo, y su posision es: %d\n", f.where);
+    } else {
+      printf("EL valor ingresado es cota superior\n");
+    }
+  } 
+  else if (f.is_lowerbound) {
+    if (f.exists){
+       printf("El valor ingresado es un minimo, y su posision es: %d\n", f.where);
+    } 
+    else {
+      printf("EL valor ingresado es cota inferior\n");
+    }
+  } 
+  else{
+    printf("El valor ingresado no es cota, ni maximo, ni minimo\n");
+  }    
+  
+
+  return EXIT_SUCCESS;
+}
+
+
+
